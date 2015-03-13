@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with emacs by Thomas Schnuerer (MEN Mikro Elektronik GmbH) -->
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="packagedesc.xsd">
+	<name>13pp0406</name>
+	<description>MDIS5 driver package for PP4 MVB PCI104 module</description>
+	<date>2013-11-08</date>
+	<revision>Release-1.11</revision>
+	<docroot>DRIVERS/MDIS_LL/PP04/DOC/main.html</docroot>
+	<modellist>
+	    <model>
+		    <hwname>PP04</hwname>
+			<description>PCI104 MVB Interface</description>
+			<devtype>MDIS</devtype>
+	    	<autoid/>
+	    	<busif>PCI-104</busif>
+	    	<settinglist>
+			  <setting hidden="true">
+	    	    <name>PCI_VENDOR_ID</name>
+	    	    <type>U_INT32</type>
+	    	    <defaultvalue>0x1172</defaultvalue>
+	    	  </setting>
+	    	  <setting hidden="true">
+	    	    <name>PCI_DEVICE_ID</name>
+	    	    <type>U_INT32</type>
+	    	    <defaultvalue>0x000C</defaultvalue>
+	    	  </setting>
+	    	</settinglist>
+			<swmodulelist>
+			  <swmodule>
+				<name>pp04</name>
+				<description>Driver for PP4 MVB module</description>
+				<type>Low Level Driver</type>
+				<makefilepath>PP04/DRIVER/COM/driver.mak</makefilepath>
+			  </swmodule>
+			</swmodulelist>
+		</model>
+	</modellist>
+	<settinglist>
+	    <setting hidden="true">
+           <name>PCI_BASEREG_ASSIGN_0</name>
+           <description>mapping between low-level driver address space and PCI base address registers</description>
+           <type>U_INT32</type>
+           <defaultvalue>1</defaultvalue>
+        </setting>
+		<setting>
+			<name>MVB_MCM_MODE</name>
+			<description>Memory Configuration Mode</description>
+			<type>U_INT32</type>
+				<defaultvalue>2</defaultvalue>
+				<choises>
+					<choise>
+						<value>0</value>
+						<description>16kB TM Configuration</description>
+					</choise>
+					<choise>
+						<value>1</value>
+						<description>32kB TM Configuration</description>
+					</choise>
+					<choise>
+						<value>2</value>
+						<description>64kB TM Configuration</description>
+					</choise>
+					<choise>
+						<value>3</value>
+						<description>256kB TM Configuration</description>
+					</choise>
+					<choise>
+						<value>4</value>
+						<description>1 MB TM Configuration</description>
+					</choise>
+				</choises>
+		</setting>
+		<setting>
+			<name>MVB_CONFIG_FILTER</name>
+			<description>Filter spikes up to 40 ns from Line A/B in harsh Environments</description>
+			<type>U_INT32</type>
+				<defaultvalue>0</defaultvalue>
+				<choises>
+					<choise>
+						<value>0</value>
+						<description>No filtering of spikes</description>
+					</choise>
+					<choise>
+						<value>1</value>
+						<description>Filter spikes up to 40 ns from Line A/B</description>
+					</choise>
+				</choises>
+		</setting>
+		<setting>
+			<name>MVB_TIMEOUT</name>
+			<description>Timout Coefficient for Telegram Analysis Unit</description>
+			<type>U_INT32</type>
+				<defaultvalue>1</defaultvalue>
+				<choises>
+					<choise>
+ 						<value>0</value>
+						<description>21,3 us</description>
+					</choise>
+					<choise>
+ 						<value>1</value>
+						<description>42,7 us</description>
+					</choise>
+					<choise>
+ 						<value>2</value>
+						<description>64,0 us</description>
+					</choise>
+					<choise>
+ 						<value>3</value>
+						<description>85,4 us</description>
+					</choise>
+				</choises>
+		</setting>
+		<setting>
+		  <name>MVB_TM_WAITSTATES</name>
+			<description>minimum Waitstates inserted by Traffic Memory Controller for all TM accesses</description>
+			<type>U_INT32</type>
+				<defaultvalue>3</defaultvalue>
+				<choises>
+					<choise>
+ 						<value>0</value>
+						<description>0 Waitstates inserted</description>
+					</choise>
+					<choise>
+ 						<value>1</value>
+						<description>1 Waitstates inserted</description>
+					</choise>
+					<choise>
+ 						<value>2</value>
+						<description>2 Waitstates inserted</description>
+					</choise>
+					<choise>
+ 						<value>3</value>
+						<description>3 Waitstates inserted</description>
+					</choise>
+				</choises>
+		</setting>
+	</settinglist>
+	<swmodulelist>
+		<swmodule>
+			<name>mvb_simp</name>
+			<description>Comm. test tool for PP04 MVB card</description>
+			<type>Common Tool</type>
+			<makefilepath>MVB_SIMP/COM/program.mak</makefilepath>
+		</swmodule>
+	</swmodulelist>
+</package>
