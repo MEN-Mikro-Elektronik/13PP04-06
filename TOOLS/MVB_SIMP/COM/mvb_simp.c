@@ -153,7 +153,7 @@ static void SetupData(u_int8 *dat, u_int32 size, int32 show);
  */
 static void Usage()
 {
-    printf("mvb_simp <device> [options],  built %s %s\n", __DATE__, __TIME__);
+    printf("mvb_simp <device> [options]\n" );
     printf("Example for MVB slave device driver.\n");
     printf("MVB port setup is based on busmaster shown below \n");
     printf("(the Master is a 3rd party device, Slave A/B are both PP4)\n");
