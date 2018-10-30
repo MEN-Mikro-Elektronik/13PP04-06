@@ -10,34 +10,23 @@
  *  Description: PP04 driver internal declarations and defines
  *
  *
- *-------------------------------[ History ]---------------------------------
- *
- * $Log: pp04_drv_int.h,v $
- * Revision 1.5  2013/05/16 17:48:07  ts
- * R: NSDB data passing with mvb_simp failed on 64bit linux
- * M: bugfix: replaced traffic memory addresses with INT32_OR_64 types
- *
- * Revision 1.4  2009/04/21 19:45:00  ts
- * R: 1) Master frametable test didnt work under 2.6 kernels
- * M: 1) moved code from previous separate ZIP file into driver,
- *       added members for master frame test to LL_HANDLE
- *
- * Revision 1.3  2006/10/17 12:57:43  ts
- * added isActiveAlarmTI2 to determine Alarm state
- *
- * Revision 1.2  2006/09/26 17:10:45  ts
- * correct VP Offset to 0x20
- *
- * Revision 1.1  2005/06/28 16:51:16  ts
- * Initial Revision
- *
- * Revision 1.1  2005/06/25 13:12:23  ts
- * Initial Revision
- *
- *
  *---------------------------------------------------------------------------
  * (c) Copyright 2001 by MEN Mikro Elektronik GmbH, Nuremberg, Germany
  ****************************************************************************/
+/*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef _PP04_DRV_INT_H_
 #define _PP04_DRV_INT_H_

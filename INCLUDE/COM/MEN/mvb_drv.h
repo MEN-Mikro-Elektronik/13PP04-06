@@ -12,28 +12,24 @@
  *
  *     \switches -
  */
- /*-------------------------------[ History ]--------------------------------
- *
- * $Log: mvb_drv.h,v $
- * Revision 3.4  2010/09/24 17:39:32  ts
- * R: driver was not capable for 64bit usage
- * M: ported driver to MDIS5, optionally define 64bit types
- *
- * Revision 3.3  2009/04/21 19:50:11  ts
- * R: 1) Master frametable test didnt work under 2.6 kernels
- * M: 1) moved code from previous separate ZIP file into driver,
- *       added SetStat codes to emit frame tables
- *
- * Revision 3.2  2005/06/28 17:06:56  ts
- * cosmetics
- *
- * Revision 3.1  2005/06/28 16:51:21  ts
- * Initial Revision
- *
- *
+ /*
  *---------------------------------------------------------------------------
  * (c) Copyright 2003 by MEN Mikro Elektronik GmbH, Nuremberg, Germany
  ****************************************************************************/
+/*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef _PP04_DRV_H
 #define _PP04_DRV_H

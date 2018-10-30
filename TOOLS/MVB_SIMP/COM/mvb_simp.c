@@ -13,54 +13,24 @@
  *
  *     Required: libraries: mdis_api, usr_oss
  */
- /*-------------------------------[ History ]--------------------------------
- *
- * $Log: mvb_simp.c,v $
- * Revision 1.10  2013/11/08 09:52:59  dpfeuffer
- * R: Windows compiler error, because wrong parameter type passed to M_getstat
- * M: main(): blkstartP type changed from INT32_OR_64* to int32*
- *    (according M_getstat prototype)
- *
- * Revision 1.9  2013/05/16 17:50:03  ts
- * R: NSDB data passing with mvb_simp failed on 64bit linux
- * M: bugfix: replace int32 cast of blk with INT32_OR_64
- *
- * Revision 1.8  2010/09/24 17:41:33  ts
- * R: simp program was not capable for 64bit usage
- * M: ported to MDIS5, changed path variable type to MDIS_PATH
- *
- * Revision 1.7  2010/04/21 10:40:02  ts
- * R: driver contains MF table send for intern tests
- * M: add test option -b
- *
- * Revision 1.6  2009/04/22 12:07:45  ts
- * R: 1) mvb_simp could not be run on 2 PP4 at once (was
- *       used with 3rd party MVB slave first)
- *    2) timestamp for communication logging was missing
- *    3) cosmetics, usage text needed to be more descriptive
- * M: 1) added option -a to run mvb_simp as slave a or B
- *    2) added dump of seconds in data receive dump
- *    3) updated usage text with port info of used busmaster
- *
- * Revision 1.5  2006/10/23 09:04:53  ts
- * added Option -d to usage() description
- *
- * Revision 1.4  2006/10/23 08:53:54  ts
- * bugfix: execute loop forever if no runtime specified
- * added option -d if whole TM shall be dumped
- *
- * Revision 1.3  2006/10/17 13:13:27  ts
- * made G_ports setup not be const (Win MDIS)
- *
- * Revision 1.2  2006/10/17 13:03:11  ts
- * bugfix: report errno with 32bit
- *
- * Revision 1.1  2005/06/28 16:51:18  ts
- * Initial Revision
- *
+ /*
  *---------------------------------------------------------------------------
  * (c) Copyright 2003 by MEN mikro elektronik GmbH, Nuremberg, Germany
  ****************************************************************************/
+/*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include <stdio.h>
 #include <string.h>

@@ -12,44 +12,24 @@
  *
  *     \switches 
  */
- /*-------------------------------[ History ]--------------------------------
- *
- * $Log: pp04_drv.c,v $
- * Revision 1.9  2013/05/16 17:46:43  ts
- * R: NSDB data passing with mvb_simp failed on 64bit linux
- * M: bugfix: replaced explicit (u_)int32 casts to INT32_OR_64
- *
- * Revision 1.7  2010/09/24 17:37:39  ts
- * R: driver supported 32bit only
- * M: ported driver to MDIS 5 according to porting guide
- *
- * Revision 1.6  2009/04/21 19:42:36  ts
- * R: 1) port BlockRead returned only every 2nd byte
- * M: 1) corrected type casting error in PP04_BlockRead()
- *
- * Revision 1.5  2006/10/23 09:08:21  ts
- * bugfix: loop variable words is u_int32, not u_int16
- *
- * Revision 1.4  2006/10/17 12:56:44  ts
- * added llHdl->isActiveAlarmTI2 to determine Alarm state,
- * llHdl dereferencing bugfix
- *
- * Revision 1.3  2006/09/27 18:31:35  ts
- * several casts added due to strict windows Compiler
- *
- * Revision 1.2  2006/09/26 17:14:20  ts
- * more verbose output of MVBCS1 seek, cosmetics
- *
- * Revision 1.1  2005/06/28 16:51:13  ts
- * Initial Revision
- *
- * Revision 1.1  2005/06/25 13:12:22  ts
- * Initial Revision
- *
- *
+ /*
  *---------------------------------------------------------------------------
  * (c) Copyright 2004 by MEN Mikro Elektronik GmbH, Nuremberg, Germany
  ****************************************************************************/
+/*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #define _NO_LL_HANDLE		/* ll_defs.h: don't define LL_HANDLE struct */
 #include <MEN/men_typs.h>   /* system dependent definitions  		*/
