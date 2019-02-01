@@ -1936,7 +1936,7 @@ static int32 PP04_GetStat(LL_HANDLE *llHdl, int32 code, int32 ch, INT32_OR_64 *v
 		 |  ident table             |
 		 +--------------------------*/
     case M_MK_BLK_REV_ID:
-		*value64P = (int32)&llHdl->idFuncTbl;
+		*value64P = (INT32_OR_64)&llHdl->idFuncTbl;
         break;
 		/*--------------------------+
 		 |  error Frame counter     |
