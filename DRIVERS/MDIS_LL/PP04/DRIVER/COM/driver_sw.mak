@@ -6,17 +6,8 @@
 #
 #    Description: Makefile definitions for the PP04 driver- SWAPPED access
 #
-#---------------------------------[ History ]---------------------------------
-#   $Log: driver_sw.mak,v $
-#   Revision 1.1  2005/06/28 16:51:15  ts
-#   Initial Revision
-#
-#   Revision 1.1  2005/06/25 13:12:20  ts
-#   Initial Revision
-#
-#
 #-----------------------------------------------------------------------------
-#   (c) Copyright 2000 by MEN mikro elektronik GmbH, Nuernberg, Germany
+#   Copyright (c) 2000-2019, MEN Mikro Elektronik GmbH
 #*****************************************************************************
 
 MAK_NAME=pp04_sw
