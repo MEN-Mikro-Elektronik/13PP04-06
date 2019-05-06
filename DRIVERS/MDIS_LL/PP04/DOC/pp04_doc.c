@@ -306,7 +306,7 @@
 Simple example for driver usage
 */
 
-/*! \page dummy
+/*! \page pp04dummy MEN logo
   \menimages
 */
 
