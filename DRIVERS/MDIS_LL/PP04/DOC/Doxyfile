@@ -1,0 +1,22 @@
+@INCLUDE_PATH = $(MEN_DOXYGENTMPL)
+@INCLUDE = DoxyfileCommon
+
+PROJECT_NAME           = "PP4 MDIS Driver"
+INPUT                  = ../DRIVER/COM/pp04_drv.c \
+                         ./pp04_doc.c \
+                         $(MEN_COM_INC)/MEN/mvb_drv.h \
+                         ../../../../TOOLS/MVB_SIMP/COM/mvb_simp.c
+
+EXAMPLE_RECURSIVE      = YES
+EXAMPLE_PATH           = ../../../../TOOLS/MVB/MVB_SIMP/COM/
+
+OUTPUT_DIRECTORY       = .
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = YES
+GENERATE_HTMLHELP      = YES
+WARNINGS               = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_IF_UNDOCUMENTED   = YES
+GENERATE_HTMLHELP      = YES
+TAGFILES               = ../../../../LIBSRC/MDIS_API/DOC/mdis_api.tag=../../../../../LIBSRC/MDIS_API/DOC/html
+GENERATE_TAGFILE       = pp4_driver.tag
