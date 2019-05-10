@@ -8,7 +8,7 @@ INPUT                  = ../DRIVER/COM/pp04_drv.c \
                          ../../../../TOOLS/MVB_SIMP/COM/mvb_simp.c
 
 EXAMPLE_RECURSIVE      = YES
-EXAMPLE_PATH           = ../../../../TOOLS/MVB/MVB_SIMP/COM/
+EXAMPLE_PATH           = ../../../../TOOLS/MVB_SIMP/COM/
 
 OUTPUT_DIRECTORY       = .
 EXTRACT_ALL            = YES
