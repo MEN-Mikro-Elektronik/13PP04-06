@@ -1,6 +1,8 @@
 @INCLUDE_PATH = $(MEN_DOXYGENTMPL)
 @INCLUDE = DoxyfileCommon
 
+#MDIS_COMMIT=
+
 PROJECT_NAME           = "PP4 MDIS Driver"
 INPUT                  = ../DRIVER/COM/pp04_drv.c \
                          ./pp04_doc.c \
