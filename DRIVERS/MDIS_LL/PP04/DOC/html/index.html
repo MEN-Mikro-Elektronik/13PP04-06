@@ -11,7 +11,7 @@
 
 <div class="left_to_right" style="padding-top: 6px; background-color: #F0F0F0; height: 110px; border-bottom: 2px solid #D1D1D2;">
 	<!-- Titel -->
-	<img src="menlogo.gif" alt="MEN" style="float: left; height: 103px; width: 155px; margin: 0px;"></a>
+	<img src="menlogo.gif" alt="MEN" style="float: left; height: 103px; width: 155px; margin: 0px;">
 	<h1 style="margin: 0px; padding-top: 35px; padding-bottom: 0px;">PP4 MDIS Driver &nbsp; </h1>
 	<h3>Main Page</h3>
 </div>
@@ -109,7 +109,7 @@ Reading the Data</h3>
  <h4><a name="getblock"></a>
 Using M_getblock()</h4>
 MVB sinkport Data is fetched from the device with a block read done with M_getblock. Because the size of ports can be up to 256 bit, the standard M_read/M_write functions are not appropriate. The typical call looks like <div class="fragment"><pre>    <a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, M_MK_CH_CURRENT, portAddress);
-    bytesRead = <a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a10">M_getblock</a>(path, buf, portSize);
+    bytesRead = <a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a14">M_getblock</a>(path, buf, portSize);
 </pre></div>The current channel is set to the sink ports address (=channel number), then the block read is done. if everything went ok, the read number of bytes is equal to the sinkports size. Several errors may occur upon which the M_getblock returns 0 or -1:<p>
 <ul>
 <li>the port is a source port, not a sink This is not allowed since the MVB Asic and the CPU would access the same page in TM.</li><li>the sinktime expired when sinktime Supervision is on, the ports TACK value is checked and compared to the given treshold (see MVB_LA_PORT definition).</li></ul>
@@ -122,7 +122,7 @@ Writing the Data</h3>
  <h4><a name="setblock"></a>
 Using M_setblock()</h4>
 MVB sourceport Data is written to the device with a block write done with M_setblock. Because the size of ports can be up to 256 bit, the standard M_read/M_write functions are not appropriate. The typical call looks like <div class="fragment"><pre>    <a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, M_MK_CH_CURRENT, portAddress);
-    bytesWritten = <a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a11">M_setblock</a>(path, buf, portSize);
+    bytesWritten = <a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a15">M_setblock</a>(path, buf, portSize);
 </pre></div>The current channel is set to the sink ports address (=channel number), then the block read is done. if everything went ok, the read number of bytes is equal to the sinkports size. Several errors may occur upon which the M_setblock returns 0 or -1:<p>
 <ul>
 <li>the port is a sink port, not a source This is not allowed since the MVB Asic and the CPU would access the same page in TM.</li><li>the port doesnt exist</li></ul>
@@ -151,23 +151,23 @@ Supported API Functions</h2>
 <td><b>API function</b> </td><td><b>Functionality</b> </td><td><b>Corresponding low level function</b><p>
 </td></tr>
 <tr>
-<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a6">M_open()</a></td><td>Open device</td><td><a class="el" href="pp04__drv_8c.html#a18">PP04_Init()</a> </td></tr>
+<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a4">M_open()</a></td><td>Open device</td><td><a class="el" href="pp04__drv_8c.html#a18">PP04_Init()</a> </td></tr>
 <tr>
-<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a7">M_close()</a> </td><td>Close device  </td><td><a class="el" href="pp04__drv_8c.html#a19">PP04_Exit()</a>) </td></tr>
+<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a9">M_close()</a> </td><td>Close device  </td><td><a class="el" href="pp04__drv_8c.html#a19">PP04_Exit()</a>) </td></tr>
 <tr>
-<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a8">M_read()</a> </td><td>Read from device  </td><td><a class="el" href="pp04__drv_8c.html#a20">PP04_Read()</a> </td></tr>
+<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a10">M_read()</a> </td><td>Read from device  </td><td><a class="el" href="pp04__drv_8c.html#a20">PP04_Read()</a> </td></tr>
 <tr>
-<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a9">M_write()</a> </td><td>Write to device  </td><td><a class="el" href="pp04__drv_8c.html#a21">PP04_Write()</a> </td></tr>
+<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a11">M_write()</a> </td><td>Write to device  </td><td><a class="el" href="pp04__drv_8c.html#a21">PP04_Write()</a> </td></tr>
 <tr>
 <td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat()</a> </td><td>Set device parameter  </td><td><a class="el" href="pp04__drv_8c.html#a22">PP04_SetStat()</a> </td></tr>
 <tr>
 <td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat()</a> </td><td>Get device parameter  </td><td><a class="el" href="pp04__drv_8c.html#a23">PP04_GetStat()</a> </td></tr>
 <tr>
-<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a10">M_getblock()</a> </td><td>Block read from device  </td><td><a class="el" href="pp04__drv_8c.html#a24">PP04_BlockRead()</a> </td></tr>
+<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a14">M_getblock()</a> </td><td>Block read from device  </td><td><a class="el" href="pp04__drv_8c.html#a24">PP04_BlockRead()</a> </td></tr>
 <tr>
-<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a11">M_setblock()</a> </td><td>Block write from device  </td><td><a class="el" href="pp04__drv_8c.html#a25">PP04_BlockWrite()</a> </td></tr>
+<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a15">M_setblock()</a> </td><td>Block write from device  </td><td><a class="el" href="pp04__drv_8c.html#a25">PP04_BlockWrite()</a> </td></tr>
 <tr>
-<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a15">M_errstringTs()</a> </td><td>Generate error message  </td><td>- </td></tr>
+<td><a class="elRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/m__errstr_8c.html#a1">M_errstringTs()</a> </td><td>Generate error message  </td><td>- </td></tr>
 </table>
 <p>
 <br>
@@ -202,7 +202,7 @@ mxx_xyz.c
 <!-- Footer -->
 	<p class="footer">
 	Generated for PP4 MDIS Driver using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2012 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
 	</p>
 </div>
 

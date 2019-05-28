@@ -11,7 +11,7 @@
 
 <div class="left_to_right" style="padding-top: 6px; background-color: #F0F0F0; height: 110px; border-bottom: 2px solid #D1D1D2;">
 	<!-- Titel -->
-	<img src="menlogo.gif" alt="MEN" style="float: left; height: 103px; width: 155px; margin: 0px;"></a>
+	<img src="menlogo.gif" alt="MEN" style="float: left; height: 103px; width: 155px; margin: 0px;">
 	<h1 style="margin: 0px; padding-top: 35px; padding-bottom: 0px;">PP4 MDIS Driver &nbsp; </h1>
 	<h3>Example Documentation</h3>
 </div>
@@ -23,7 +23,507 @@
 <center>
 <a class="qindex" href="index.html">Main Page</a> &nbsp; <a class="qindex" href="annotated.html">Data Structures</a> &nbsp; <a class="qindex" href="files.html">File List</a> &nbsp; <a class="qindex" href="functions.html">Data Fields</a> &nbsp; <a class="qindex" href="globals.html">Globals</a> &nbsp; <a class="qindex" href="pages.html">Related Pages</a> &nbsp; <a class="qindex" href="examples.html">Examples</a> &nbsp; </center>
 <hr><h1>mvb_simp.c</h1>Simple example for driver usage<p>
-<div class="fragment"><pre></pre></div>
+<div class="fragment"><pre><span class="comment">/****************************************************************************/</span>
+ <span class="comment">/*</span>
+<span class="comment"> *---------------------------------------------------------------------------</span>
+<span class="comment"> * Copyright (c) 2003-2019, MEN Mikro Elektronik GmbH</span>
+<span class="comment"> ****************************************************************************/</span>
+<span class="comment">/*</span>
+<span class="comment">* This program is free software: you can redistribute it and/or modify</span>
+<span class="comment">* it under the terms of the GNU General Public License as published by</span>
+<span class="comment">* the Free Software Foundation, either version 2 of the License, or</span>
+<span class="comment">* (at your option) any later version.</span>
+<span class="comment">*</span>
+<span class="comment">* This program is distributed in the hope that it will be useful,</span>
+<span class="comment">* but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="comment">* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="comment">* GNU General Public License for more details.</span>
+<span class="comment">*</span>
+<span class="comment">* You should have received a copy of the GNU General Public License</span>
+<span class="comment">* along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="comment">*/</span>
+
+<span class="preprocessor">#include &lt;stdio.h&gt;</span>
+<span class="preprocessor">#include &lt;string.h&gt;</span>
+<span class="preprocessor">#include &lt;stdlib.h&gt;</span>
+<span class="preprocessor">#include &lt;MEN/men_typs.h&gt;</span>
+<span class="preprocessor">#include &lt;MEN/usr_oss.h&gt;</span>
+<span class="preprocessor">#include &lt;MEN/usr_utl.h&gt;</span>
+<span class="preprocessor">#include &lt;MEN/mdis_api.h&gt;</span>
+<span class="preprocessor">#include &lt;<a class="code" href="mvb__drv_8h.html">MEN/mvb_drv.h</a>&gt;</span>
+
+<span class="comment">/*--------------------------------------+</span>
+<span class="comment">|   DEFINES                             |</span>
+<span class="comment">+--------------------------------------*/</span>
+
+<span class="preprocessor">#define CHK(expression) \</span>
+<span class="preprocessor"> if((expression)) {\</span>
+<span class="preprocessor">     printf("\n*** Error during: %s\nfile %s\nline %d\n", \</span>
+<span class="preprocessor">      #expression,__FILE__,__LINE__);\</span>
+<span class="preprocessor">     goto ABORT;\</span>
+<span class="preprocessor"> }</span>
+<span class="preprocessor"></span>
+<span class="preprocessor">#define MS_PER_SEC              1000</span>
+<span class="preprocessor"></span>
+<span class="preprocessor">#define MVB_DEVICE_ADDRESS_SLAVE_B      0x0001</span>
+<span class="preprocessor"></span><span class="preprocessor">#define MVB_DEVICE_ADDRESS_SLAVE_A      0x004d</span>
+<span class="preprocessor"></span>
+<span class="comment">/* MVB_LA_PORT struct is 64 byte aligned */</span>
+<span class="preprocessor">#define LP_PAD  {0,0,0,0,0,0,0,0,0,0}</span>
+<span class="preprocessor"></span>
+<span class="comment">/* indices of G_port[] array below which are used as source/sink examples */</span>
+<span class="preprocessor">#define PORT_SIZE_MAX           32</span>
+<span class="preprocessor"></span>
+<span class="preprocessor">#define WD_TIME                 200     </span><span class="comment">/* milliseconds */</span>
+<span class="preprocessor">#define MVB_TX_TIME             250 </span><span class="comment">/* milliseconds */</span>
+
+<span class="comment">/*--------------------------------------+</span>
+<span class="comment">|   TYPDEFS                             |</span>
+<span class="comment">+--------------------------------------*/</span>
+<span class="comment">/* none */</span>
+
+<span class="comment">/*--------------------------------------+</span>
+<span class="comment">|   EXTERNALS                           |</span>
+<span class="comment">+--------------------------------------*/</span>
+<span class="comment">/* none */</span>
+
+<span class="comment">/*--------------------------------------+</span>
+<span class="comment">|   GLOBALS                             |</span>
+<span class="comment">+--------------------------------------*/</span>
+
+<span class="keyword">static</span> <span class="keyword">volatile</span> u_int32 G_getnewdata    = FALSE;
+<span class="keyword">static</span> <span class="keyword">volatile</span> u_int32 G_geterrors     = FALSE;
+<span class="keyword">static</span> <span class="keyword">volatile</span> u_int32 G_quit          = FALSE;
+<span class="keyword">static</span> <span class="keyword">volatile</span> u_int32 G_timeSec       = 0;
+
+<span class="comment">/* This is SlaveB setup, if SlaveA is used source and sink is switched later */</span>
+<span class="keyword">static</span> <a class="code" href="mvb__drv_8h.html#a71">MVB_LA_PORT</a> G_ports[]={ 
+    {  14,  4, 32,  <span class="stringliteral">"ATO_ATS_S"</span>,  <a class="code" href="mvb__drv_8h.html#a45">MVB_LA_PORT_SOURCE</a>, 0xffdf, 0, <a class="code" href="mvb__simp_8c.html#a4">LP_PAD</a> },
+    {  15,  8, 32,  <span class="stringliteral">"ATO_DGP_S"</span>,  <a class="code" href="mvb__drv_8h.html#a45">MVB_LA_PORT_SOURCE</a>, 0xff7f, 0, <a class="code" href="mvb__simp_8c.html#a4">LP_PAD</a> },
+    {  16, 12, 32,  <span class="stringliteral">"ATO_MMI_M"</span>,  <a class="code" href="mvb__drv_8h.html#a45">MVB_LA_PORT_SOURCE</a>, 0xffef, 0, <a class="code" href="mvb__simp_8c.html#a4">LP_PAD</a> },
+    {  17, 24,  8,  <span class="stringliteral">"ATO_TMS_F"</span>,  <a class="code" href="mvb__drv_8h.html#a45">MVB_LA_PORT_SOURCE</a>, 0xfffb, 0, <a class="code" href="mvb__simp_8c.html#a4">LP_PAD</a> },
+    {  18, 16, 32,  <span class="stringliteral">"ATO_TMS_S"</span>,  <a class="code" href="mvb__drv_8h.html#a45">MVB_LA_PORT_SOURCE</a>, 0xff7f, 0, <a class="code" href="mvb__simp_8c.html#a4">LP_PAD</a> },
+    { 890, 25,  8,  <span class="stringliteral">"VCU_ATO_F"</span>,  <a class="code" href="mvb__drv_8h.html#a46">MVB_LA_PORT_SINK</a>,   0xfe00, 0, <a class="code" href="mvb__simp_8c.html#a4">LP_PAD</a> },
+    { 891, 20, 32,  <span class="stringliteral">"VCU_ATO_M"</span>,  <a class="code" href="mvb__drv_8h.html#a46">MVB_LA_PORT_SINK</a>,   0xfe00, 0, <a class="code" href="mvb__simp_8c.html#a4">LP_PAD</a> }
+};
+
+
+<span class="comment">/*--------------------------------------+</span>
+<span class="comment">|   PROTOTYPES                          |</span>
+<span class="comment">+--------------------------------------*/</span>
+<span class="keyword">static</span> <span class="keywordtype">void</span> __MAPILIB <a name="a0"></a><a class="code" href="mvb__simp_8c.html#a13">SignalHandler</a>( u_int32 sig );
+<span class="keyword">static</span> <span class="keywordtype">void</span> <a name="a1"></a><a class="code" href="mvb__simp_8c.html#a14">DumpMvbErrors</a>(MDIS_PATH mdispath);
+<span class="keyword">static</span> <span class="keywordtype">void</span> <a name="a2"></a><a class="code" href="mvb__simp_8c.html#a15">Usage</a>(<span class="keywordtype">void</span>);
+<span class="keyword">static</span> <span class="keywordtype">void</span> <a name="a3"></a><a class="code" href="mvb__simp_8c.html#a16">DumpData</a>(u_int8 *dat, u_int32 size, int32 nbrBytesRead );
+<span class="keyword">static</span> <span class="keywordtype">void</span> <a name="a4"></a><a class="code" href="mvb__simp_8c.html#a17">SetupData</a>(u_int8 *dat, u_int32 size, int32 show);
+
+<span class="comment">/***************************************************************************/</span>
+<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="mvb__simp_8c.html#a15">Usage</a>()
+{
+    printf(<span class="stringliteral">"mvb_simp &lt;device&gt; [options]\n"</span> );
+    printf(<span class="stringliteral">"Example for MVB slave device driver.\n"</span>);
+    printf(<span class="stringliteral">"MVB port setup is based on busmaster shown below \n"</span>);
+    printf(<span class="stringliteral">"(the Master is a 3rd party device, Slave A/B are both PP4)\n"</span>);
+    printf(<span class="stringliteral">"  +---------+   +---------+   +---------+\n"</span>);
+    printf(<span class="stringliteral">"  | Master  |   | Slave A |   | Slave B |\n"</span>);
+    printf(<span class="stringliteral">"  | Adr:58H |   | Adr:4DH |   | Adr:01H |\n"</span>);
+    printf(<span class="stringliteral">"  +---------+   +---------+   +---------+\n"</span>);
+    printf(<span class="stringliteral">"       |             |             |\n"</span>);
+    printf(<span class="stringliteral">"     -[_]-----------[_]-----------[_]-\n\n"</span>);
+    printf(<span class="stringliteral">"|idx |port| size |  cycle | name      | source | tack\n"</span>);
+    printf(<span class="stringliteral">"|    |    |[byte]|   [ms] |           |        |\n"</span>);
+    printf(<span class="stringliteral">"|----+----+------+--------+-----------+--------+-------\n"</span>);
+    printf(<span class="stringliteral">"|  0 | 14 |   32 |    256 |'ATO_ATS_S'| SlaveB | 0FFDFH\n"</span>);
+    printf(<span class="stringliteral">"|  1 | 15 |   32 |   1024 |'ATO_DGP_S'| SlaveB | 0FF7FH\n"</span>);
+    printf(<span class="stringliteral">"|  2 | 16 |   32 |    128 |'ATO_MMI_M'| SlaveB | 0FFEFH\n"</span>);
+    printf(<span class="stringliteral">"|  3 | 17 |    8 |     32 |'ATO_TMS_F'| SlaveB | 0FFFBH\n"</span>);
+    printf(<span class="stringliteral">"|  4 | 18 |   32 |   1024 |'ATO_TMS_S'| SlaveB | 0FF7FH\n"</span>);
+    printf(<span class="stringliteral">"|  5 |890 |    8 |     16 |'VCU_ATO_F'| SlaveA | 0FFFBH\n"</span>);
+    printf(<span class="stringliteral">"|  6 |891 |   32 |    128 |'VCU_ATO_M'| SlaveA | 0FFDFH\n\n"</span>);
+    printf(<span class="stringliteral">" -r=1:      dump chosen sink port\n"</span>);
+    printf(<span class="stringliteral">" -w=1:      write to port specified by -p=port\n"</span>);
+    printf(<span class="stringliteral">" -p=idx:    index of port to access             -p=3: port 17\n"</span>);
+    printf(<span class="stringliteral">" -d=1:      dump whole TM after execution\n"</span>);
+    printf(<span class="stringliteral">" -s=1:      dump sinktime of example sinkport\n"</span>);
+    printf(<span class="stringliteral">" -a=&lt;slave&gt; -a=0: be Slave B,  -a=1: be Slave A. Port setup:\n"</span>);
+    printf(<span class="stringliteral">"            Slave A: 14,15,16,17,18: sink    890,891: source\n"</span>);
+    printf(<span class="stringliteral">"            Slave B: 14,15,16,17,18: source  890,891: sink\n"</span>);
+    printf(<span class="stringliteral">" -t=1:      trigger the Watchdog every 500ms.\n"</span>);   
+    printf(<span class="stringliteral">"            must be set, omitting causes Watchdog timeout.\n"</span>);
+    printf(<span class="stringliteral">" -i=[1..9]: sinktime supervision Interval:\n"</span>);
+    printf(<span class="stringliteral">"            -i=0  No Sinktime Supervision\n"</span>);
+    printf(<span class="stringliteral">"            -i=1: 1 ms -i=2: 2 ms -i=3: 4 ms .. -i=9: 256 ms\n"</span>);
+}
+
+
+
+<span class="comment">/***************************************************************************/</span>
+<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="mvb__simp_8c.html#a17">SetupData</a>(u_int8 *dat, u_int32 size, int32 show)
+{
+    u_int32  i;
+    <span class="comment">/* some pseudo random seed */</span>
+    u_int32  seed = UOS_MsecTimerGet() &amp; 0xff;
+
+    <span class="keywordflow">for</span> (i = 0; i &lt; size; i++){
+        *dat = (u_int8)(i + seed);
+        <span class="keywordflow">if</span> (show)
+            printf( <span class="stringliteral">"%02x"</span>, *dat );
+
+        dat++;
+    }
+    <span class="keywordflow">if</span> (!!show)
+        printf( <span class="stringliteral">"\n"</span>);
+}
+
+
+<span class="comment">/***************************************************************************/</span>
+<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="mvb__simp_8c.html#a16">DumpData</a>(u_int8 *dat, u_int32 size, int32 nbrBytesRead )
+{
+    u_int8  i;
+    <span class="keywordflow">if</span>(size &gt; <a class="code" href="mvb__simp_8c.html#a5">PORT_SIZE_MAX</a>) 
+        <span class="keywordflow">return</span>;
+
+    printf(<span class="stringliteral">"Data:\n"</span>);
+    <span class="keywordflow">for</span> (i=0; i &lt; size; i++ )
+        printf(<span class="stringliteral">"%02x"</span>, *dat++);
+    printf(<span class="stringliteral">"\n"</span>);
+
+}
+
+
+<span class="comment">/********************************* main ************************************/</span>
+<span class="keywordtype">int</span> <a name="a5"></a><a class="code" href="mvb__simp_8c.html#a18">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[])
+{
+    <a class="code" href="mvb__drv_8h.html#a72">MDIS_PATH</a> path;
+    int32 sinktime, retval;
+    u_int32 errnumber = 0;
+
+    <a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/structM__SG__BLOCK.html">M_SG_BLOCK</a> blk;
+    int32 *blkstartP=NULL;
+
+    u_int32 optReadSink, optWriteSrc, optDumpSinktime, optSinktimeInterval;
+    u_int32 optWdTrigger, optBA, optNoWdog, optDumpTm, i;
+    u_int32 optSlave, optPort;
+    u_int32 msWriteTime=0, timeElapsed=0, startTime=0, timeCurrent=0;
+
+    <span class="comment">/* dummy buffer to read data into */</span>
+    u_int16 dataBuf[65536];
+
+    <span class="keywordtype">char</span> *device, *str, *errstr;
+    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> buf[40];
+
+
+    <span class="comment">/* init globals to 0 for OSes which keep mvb_simp persistent (vxWorks) */</span>
+    G_getnewdata    = FALSE;
+    G_geterrors     = FALSE;
+    G_quit          = FALSE;
+    G_timeSec       = 0;
+
+    <span class="keywordflow">if</span> (argc &lt; 2 || strcmp(argv[1],<span class="stringliteral">"-?"</span>) == 0){
+        <a class="code" href="mvb__simp_8c.html#a15">Usage</a>();
+        <span class="keywordflow">return</span> 1;
+    }
+    
+    <span class="comment">/*--------------------+</span>
+<span class="comment">     | check arguments    |</span>
+<span class="comment">     +--------------------*/</span>
+    device = argv[1];
+
+    <span class="keywordflow">if</span> ((errstr = UTL_ILLIOPT(<span class="stringliteral">"nba=d=p=l=t=w=r=s=i=?"</span>, (<span class="keywordtype">char</span>*)buf) )) {
+        printf(<span class="stringliteral">"*** %s\n"</span>, errstr);
+        <span class="keywordflow">return</span>(1);
+    }
+
+    optReadSink         =   ((str = UTL_TSTOPT(<span class="stringliteral">"r="</span>)) ? atoi(str) : 0);
+    optWriteSrc         =   ((str = UTL_TSTOPT(<span class="stringliteral">"w="</span>)) ? atoi(str) : 0);
+    optDumpSinktime     =   ((str = UTL_TSTOPT(<span class="stringliteral">"s="</span>)) ? atoi(str) : 0);
+    optSinktimeInterval =   ((str = UTL_TSTOPT(<span class="stringliteral">"i="</span>)) ? atoi(str) : 0);
+    optWdTrigger        =   ((str = UTL_TSTOPT(<span class="stringliteral">"t="</span>)) ? atoi(str) : 0);
+    optDumpTm           =   ((str = UTL_TSTOPT(<span class="stringliteral">"d="</span>)) ? atoi(str) : 0);
+    optSlave            =   ((str = UTL_TSTOPT(<span class="stringliteral">"a="</span>)) ? atoi(str) : 0);
+    optPort             =   ((str = UTL_TSTOPT(<span class="stringliteral">"p="</span>)) ? atoi(str) : 0);
+
+    <span class="comment">/* unofficial test options: */</span>
+    optBA               =   ((str = UTL_TSTOPT(<span class="stringliteral">"b"</span>)) ? 1 : 0);
+    optNoWdog           =   ((str = UTL_TSTOPT(<span class="stringliteral">"n"</span>)) ? 1 : 0);
+
+    <span class="comment">/*--------------------+</span>
+<span class="comment">     | open path          |</span>
+<span class="comment">     +--------------------*/</span>
+    <a name="a6"></a><a class="code" href="mvb__simp_8c.html#a0">CHK</a>((path = <a name="a7"></a><a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a4">M_open</a>(device)) &lt; 0);
+
+    <span class="comment">/*--------------------+</span>
+<span class="comment">     |  config signals    |</span>
+<span class="comment">     +--------------------*/</span>
+
+    <span class="comment">/* install 2 signals: for problem report and new data arrival */</span>
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(UOS_SigInit( SignalHandler ));
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(UOS_SigInstall( UOS_SIG_USR1 ));
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(UOS_SigInstall( UOS_SIG_USR2 ));
+
+    <span class="comment">/* here UOS_SIG_USR1 is received upon all problem issues encountered */</span>
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a name="a8"></a><a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, MVB_SET_SIGNAL_ALERT, UOS_SIG_USR1 ));
+
+    <span class="comment">/* UOS_SIG_USR2 is sent when a sink port was set up with compare mode on */</span>
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, MVB_SET_SIGNAL_DATA,  UOS_SIG_USR2 ));
+
+    <span class="comment">/* </span>
+<span class="comment">     * before passing the NSDB set source and sink port property according  </span>
+<span class="comment">     * to passed slave instance B or A. The global G_ports is initialized as </span>
+<span class="comment">     * SlaveB, so turn the sink/source property for SlaveA.</span>
+<span class="comment">     */</span>
+    printf(<span class="stringliteral">"Running mvb_simp as slave "</span>);
+    <span class="keywordflow">if</span> (optSlave) { <span class="comment">/* if -a=1 we are slave A, 14-18 are sink */</span>
+        printf(<span class="stringliteral">"A\n"</span>);
+        G_ports[0].<a name="a9"></a><a class="code" href="structG__MVBPORTS.html#m4">srcsink</a> = <a class="code" href="mvb__drv_8h.html#a46">MVB_LA_PORT_SINK</a>;
+        G_ports[1].<a class="code" href="structG__MVBPORTS.html#m4">srcsink</a> = <a class="code" href="mvb__drv_8h.html#a46">MVB_LA_PORT_SINK</a>;
+        G_ports[2].<a class="code" href="structG__MVBPORTS.html#m4">srcsink</a> = <a class="code" href="mvb__drv_8h.html#a46">MVB_LA_PORT_SINK</a>;
+        G_ports[3].<a class="code" href="structG__MVBPORTS.html#m4">srcsink</a> = <a class="code" href="mvb__drv_8h.html#a46">MVB_LA_PORT_SINK</a>;
+        G_ports[4].<a class="code" href="structG__MVBPORTS.html#m4">srcsink</a> = <a class="code" href="mvb__drv_8h.html#a46">MVB_LA_PORT_SINK</a>;
+        G_ports[5].<a class="code" href="structG__MVBPORTS.html#m4">srcsink</a> = <a class="code" href="mvb__drv_8h.html#a45">MVB_LA_PORT_SOURCE</a>;
+        G_ports[6].<a class="code" href="structG__MVBPORTS.html#m4">srcsink</a> = <a class="code" href="mvb__drv_8h.html#a45">MVB_LA_PORT_SOURCE</a>;        
+    } <span class="keywordflow">else</span> {
+        printf(<span class="stringliteral">"B\n"</span>); <span class="comment">/* -a=0: leave G_ports as it is, 14-18 are source */</span>
+    }
+
+    <span class="comment">/* if port specified is a sink, set compare mode to get changed data */</span>
+    <span class="keywordflow">if</span> (G_ports[optPort].<a class="code" href="structG__MVBPORTS.html#m4">srcsink</a> == <a class="code" href="mvb__drv_8h.html#a46">MVB_LA_PORT_SINK</a> )
+        G_ports[optPort].<a name="a10"></a><a class="code" href="structG__MVBPORTS.html#m6">compare</a> = 1;   
+
+    <span class="comment">/*--------------------+</span>
+<span class="comment">     | set Device address |</span>
+<span class="comment">     +--------------------*/</span>
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, 
+        MVB_DEVICE_ADDRESS, 
+        optSlave ? MVB_DEVICE_ADDRESS_SLAVE_A : MVB_DEVICE_ADDRESS_SLAVE_B ));
+
+    <span class="comment">/*--------------------+</span>
+<span class="comment">     | enable MVBCS1 IRQs |</span>
+<span class="comment">     +--------------------*/</span>
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>(path, M_MK_IRQ_ENABLE, 1));
+
+    <span class="comment">/*------------------------------+</span>
+<span class="comment">     | start sinktime supervision   |</span>
+<span class="comment">     +------------------------------*/</span>
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>(path, MVB_SINKTIME_SUPERVISION, optSinktimeInterval));
+
+    <span class="comment">/* disable intern Wdog? */</span>
+    <span class="keywordflow">if</span> (optNoWdog) {
+        printf(<span class="stringliteral">"- disable intern Watchdog/hang detection\n"</span>);
+        <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>(path, MVB_NOWDOG, 1));
+    }
+
+    <span class="comment">/*--------------------+</span>
+<span class="comment">      | pass the NSDB     |</span>
+<span class="comment">     +--------------------*/</span>
+    blk.<a name="a11"></a><a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/structM__SG__BLOCK.html#o0">size</a>    = <span class="keyword">sizeof</span>(G_ports);
+    blk.<a name="a12"></a><a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/structM__SG__BLOCK.html#o1">data</a>    = (<span class="keywordtype">void</span>*)G_ports;   
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, MVB_BLK_NSDB, (INT32_OR_64)&amp;blk ));
+
+    <span class="comment">/*--------------------+</span>
+<span class="comment">     | start communication|</span>
+<span class="comment">     +--------------------*/</span>
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, MVB_INITLEVEL, MVB_INITLEVEL_FULL_OP ));   
+
+    <span class="comment">/* generate MF tables, intern use only! */</span>
+    <span class="keywordflow">if</span> (optBA) {
+        printf(<span class="stringliteral">"- set BA mode\n"</span>);
+        <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>(path, MVB_BUSADMIN, 1));
+    }
+
+    timeElapsed = UOS_MsecTimerGet();
+    msWriteTime = UOS_MsecTimerGet();
+    startTime   = UOS_MsecTimerGet();
+
+
+    <span class="comment">/* init send buffer */</span>
+    <a class="code" href="mvb__simp_8c.html#a17">SetupData</a>(buf, G_ports[optPort].size , 0);
+
+    printf(<span class="stringliteral">"Start Time (seconds): %ld"</span>, startTime / MS_PER_SEC);
+
+    <span class="comment">/* perform selected actions... */</span>
+    <span class="keywordflow">while</span>( 1 ) {
+
+        <span class="comment">/* update time */</span>   
+        <span class="keywordflow">if</span> (UOS_MsecTimerGet() &gt; (timeCurrent + <a class="code" href="mvb__simp_8c.html#a1">MS_PER_SEC</a>)) {
+            timeCurrent = UOS_MsecTimerGet();
+            G_timeSec++;
+        }
+
+        <span class="comment">/*--------------------+</span>
+<span class="comment">         | write a source port|</span>
+<span class="comment">         +--------------------*/</span>
+        <span class="keywordflow">if</span> (optWriteSrc &amp;&amp; (UOS_MsecTimerGet() &gt;(msWriteTime + <a class="code" href="mvb__simp_8c.html#a7">MVB_TX_TIME</a>))) {
+            <span class="comment">/* a sourceport is updated every second with changing content*/</span>
+            <a class="code" href="mvb__simp_8c.html#a17">SetupData</a>(buf, G_ports[optPort].size , 1);
+            <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, M_MK_CH_CURRENT, G_ports[optPort].addr ));
+            <a name="a13"></a><a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a15">M_setblock</a>(path, buf, G_ports[optPort].size);
+            msWriteTime = UOS_MsecTimerGet();
+        }
+
+        <span class="comment">/*--------------------+</span>
+<span class="comment">         | read from sink port|</span>
+<span class="comment">         +--------------------*/</span>
+        <span class="keywordflow">if</span> (optReadSink ) {
+            <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, M_MK_CH_CURRENT, G_ports[optPort].addr));
+            retval = <a name="a14"></a><a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a14">M_getblock</a>(path, buf, G_ports[optPort].size);
+            <a class="code" href="mvb__simp_8c.html#a0">CHK</a>( retval &lt;= 0 );
+            <a class="code" href="mvb__simp_8c.html#a16">DumpData</a>(buf, G_ports[optPort].size, retval);
+        }
+
+        <span class="comment">/*------------------------+</span>
+<span class="comment">         | dump sinkports sinktime|</span>
+<span class="comment">         +------------------------*/</span>
+        <span class="keywordflow">if</span> (optDumpSinktime) {
+            <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, M_MK_CH_CURRENT, G_ports[optPort].addr));
+            <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a name="a15"></a><a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( path, MVB_SINKTIME_SUPERVISION, &amp;sinktime));
+            printf(<span class="stringliteral">"Port%d Sinktime: 0x%04x\n"</span>,G_ports[optPort].addr, sinktime);
+        }
+
+        <span class="comment">/*--------------------+</span>
+<span class="comment">         | trigger Watchdog   |</span>
+<span class="comment">         +--------------------*/</span>                
+        <span class="keywordflow">if</span> (optWdTrigger &amp;&amp; (UOS_MsecTimerGet() &gt; timeElapsed + <a class="code" href="mvb__simp_8c.html#a6">WD_TIME</a>)) { 
+            timeElapsed = UOS_MsecTimerGet();
+            <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, MVB_TRIGGER_WATCHDOG, 0<span class="comment">/* unused */</span>));
+        }   
+
+        <span class="comment">/*--------------------+</span>
+<span class="comment">         | dump errors        |</span>
+<span class="comment">         +--------------------*/</span>        
+        <span class="keywordflow">if</span> (G_geterrors) {
+            <a class="code" href="mvb__simp_8c.html#a14">DumpMvbErrors</a>(path);
+            <span class="comment">/* break; */</span>
+        }
+
+        <span class="comment">/*--------------------+</span>
+<span class="comment">         | dump changed data  |</span>
+<span class="comment">         +--------------------*/</span>
+        <span class="comment">/* always dump changed data */</span>
+        <span class="keywordflow">if</span> (G_getnewdata) {
+            <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( path, M_MK_CH_CURRENT, G_ports[optPort].addr ));
+            <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(( retval = <a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a14">M_getblock</a>(path, buf, G_ports[optPort].size) &lt; 0 ));
+            <a class="code" href="mvb__simp_8c.html#a16">DumpData</a>(buf, G_ports[optPort].size, retval);
+
+            <span class="comment">/* dump current system date for logging purposes */</span>
+            printf(<span class="stringliteral">"time %ld s\n"</span>, G_timeSec );
+            G_getnewdata = FALSE;
+        }
+        
+        <span class="keywordflow">if</span> (G_quit || (UOS_KeyPressed() != -1) )
+            <span class="keywordflow">break</span>;
+
+    }
+
+    printf(<span class="stringliteral">"mvb_simp stopped.\n"</span>);
+
+    <span class="keywordflow">if</span> (optDumpTm){
+    <span class="comment">/*--------------------+</span>
+<span class="comment">     | read whole data TM |</span>
+<span class="comment">     +--------------------*/</span>
+        blk.<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/structM__SG__BLOCK.html#o0">size</a>    = <span class="keyword">sizeof</span>(dataBuf);
+        blk.<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/structM__SG__BLOCK.html#o1">data</a>    = (<span class="keywordtype">void</span>*)dataBuf; 
+        blkstartP   = (int32*)&amp;blk;
+        <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( path, MVB_BLK_DIRECT, blkstartP));
+        printf(<span class="stringliteral">"read back start of TM with getstat MVB_BLK_DIRECT:\n"</span>);
+        <span class="keywordflow">for</span> (i = 0; i &lt; 128; i++){
+            <span class="keywordflow">if</span> (!(i % 16))
+                printf(<span class="stringliteral">"\n"</span>);
+            printf(<span class="stringliteral">"0x%04x "</span>, dataBuf[i]);
+        }
+        printf(<span class="stringliteral">"\n"</span>);
+    }
+
+    <span class="comment">/*--------------------+</span>
+<span class="comment">     |  cleanup           |</span>
+<span class="comment">     +--------------------*/</span>
+    printf(<span class="stringliteral">"cleaning up."</span>);
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(UOS_SigRemove( UOS_SIG_USR1 ));
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(UOS_SigRemove( UOS_SIG_USR2 ));
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(UOS_SigExit());
+
+    <span class="keywordflow">if</span> (<a name="a16"></a><a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a9">M_close</a>( path ) &lt; 0)
+        printf(<span class="stringliteral">"error on close\n"</span>);
+
+    <span class="keywordflow">return</span>(0);
+
+ ABORT:
+    errnumber = UOS_ErrnoGet();
+    printf(<span class="stringliteral">"*** Error 0x%08x (%s)\n"</span>, errnumber, <a name="a17"></a><a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/m__errstr_8c.html#a0">M_errstring</a>(errnumber));
+    <span class="keywordflow">return</span>(0);
+}
+
+
+
+<span class="comment">/***************************************************************************/</span>
+<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="mvb__simp_8c.html#a14">DumpMvbErrors</a>(MDIS_PATH mdispath)
+{
+
+    int32 retval;
+    G_geterrors = FALSE;
+
+    <span class="comment">/*</span>
+<span class="comment">     * to minimize accesses the user can make Error retrieving</span>
+<span class="comment">     * getstats based on the error flags. Here all Error getstats are</span>
+<span class="comment">     * done for completeness</span>
+<span class="comment">     */</span>
+
+    printf(<span class="stringliteral">"Alert Signal received.\n"</span>);
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_FLAGS, &amp;retval ));
+
+    printf(<span class="stringliteral">"   Error flags: 0x%04x\n"</span>,(u_int16)retval);
+
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_MASTER_FRAMES, &amp;retval ));
+    printf(<span class="stringliteral">"   errornous Masterframes:        %d\n"</span>, retval );
+
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_SLAVE_FRAMES, &amp;retval ));
+    printf(<span class="stringliteral">"   errornous Slaveframes:         %d\n"</span>, retval );      
+
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_DUPLICATE_MASTER_FRAMES, &amp;retval ));
+    printf(<span class="stringliteral">"   Duplicate Masterframes:        %d\n"</span>, retval );      
+
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_DUPLICATE_SLAVE_FRAMES, &amp;retval ));
+    printf(<span class="stringliteral">"   Duplicate Slaveframes:         %d\n"</span>, retval );          
+
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_COUNT, &amp;retval ));
+    printf(<span class="stringliteral">"   # of errornous Frames:         %d\n"</span>, retval );          
+
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_FRAMES_LOST, &amp;retval ));
+    printf(<span class="stringliteral">"   Lost Frames:                   %d\n"</span>, retval );
+
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_REPLY_TIMEOUT, &amp;retval ));
+    printf(<span class="stringliteral">"   reply timeouts:                %d\n"</span>, retval );
+
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_BUS_TIMEOUT, &amp;retval ));
+    printf(<span class="stringliteral">"   Bus timeouts:                  %d\n"</span>, retval );          
+
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a12">M_getstat</a>( mdispath, MVB_ERR_ASIC_HANG, &amp;retval ));
+    printf(<span class="stringliteral">"   MVB ASIC hang:                 %d\n"</span>, retval );          
+
+    <span class="comment">/* dump current system date for logging purposes */</span>
+    printf(<span class="stringliteral">"time %ld s\n"</span>, G_timeSec );
+
+    <span class="comment">/* The user may let the errorcount accumulate or reset it after each read*/</span>
+    <a class="code" href="mvb__simp_8c.html#a0">CHK</a>(<a class="codeRef" doxygen="mdis_api.tag:../../../../../LIBSRC/MDIS_API/DOC/html/" href="../../../../../LIBSRC/MDIS_API/DOC/html/mdis__api_8c.html#a13">M_setstat</a>( mdispath, MVB_RESET_ERROR_COUNT, 0 ));
+    
+ ABORT:
+    <span class="keywordflow">return</span>;
+}
+
+<span class="comment">/***************************************************************************/</span>
+<span class="keyword">static</span> <span class="keywordtype">void</span> __MAPILIB <a class="code" href="mvb__simp_8c.html#a13">SignalHandler</a>( u_int32 sig )
+{
+
+    <span class="keywordflow">if</span>( sig == UOS_SIG_USR1 ) {
+        G_geterrors = TRUE;
+    }
+    
+    <span class="keywordflow">if</span>( sig == UOS_SIG_USR2 ) {
+        G_getnewdata = TRUE;
+    }
+}
+
+</pre></div>
 	</div>
 </div>
 
@@ -31,7 +531,7 @@
 <!-- Footer -->
 	<p class="footer">
 	Generated for PP4 MDIS Driver using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2012 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
 	</p>
 </div>
 
