@@ -3,8 +3,6 @@
  *        \file  mvb_drv.h
  *
  *      \author  $
- *        $Date: 2010/09/24 17:39:32 $
- *    $Revision: 3.4 $
  *
  *      \brief  declarations needed for PP04 MDIS driver usage 
  *

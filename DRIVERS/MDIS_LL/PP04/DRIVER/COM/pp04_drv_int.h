@@ -4,8 +4,6 @@
  *      Project: PP04 module driver (MDIS4)
  *
  *       Author: ts
- *        $Date: 2013/05/16 17:48:07 $
- *    $Revision: 1.5 $
  *
  *  Description: PP04 driver internal declarations and defines
  *

@@ -1,8 +1,6 @@
 #***************************  M a k e f i l e  *******************************
 #
 #         Author: ts
-#          $Date: 2005/06/28 16:51:14 $
-#      $Revision: 1.1 $
 #
 #    Description: Makefile definitions for the PP04 driver- SWAPPED access
 #
@@ -23,8 +21,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 MAK_NAME=pp04
+# the next line is updated during the MDIS installation
+STAMPED_REVISION="13PP04-06_01_13-9-gb66cd8a-dirty_2019-05-30"
 
-MAK_SWITCH=$(SW_PREFIX)MAC_MEM_MAPPED
+DEF_REVISION=MAK_REVISION=$(STAMPED_REVISION)
+
+MAK_SWITCH=$(SW_PREFIX)MAC_MEM_MAPPED \
+		$(SW_PREFIX)$(DEF_REVISION)
 
 MAK_LIBS=$(LIB_PREFIX)$(MEN_LIB_DIR)/desc$(LIB_SUFFIX)	\
          $(LIB_PREFIX)$(MEN_LIB_DIR)/oss$(LIB_SUFFIX)	\

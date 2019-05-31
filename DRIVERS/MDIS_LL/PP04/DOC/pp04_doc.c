@@ -3,8 +3,6 @@
  *        \file  pp04_doc.c
  *
  *      \author  $
- *        $Date: 2005/06/28 16:51:17 $
- *    $Revision: 1.1 $
  *
  *      \brief   User documentation for PP04 module driver
  *

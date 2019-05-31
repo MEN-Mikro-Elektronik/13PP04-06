@@ -3,8 +3,6 @@
  *        \file  pp04_drv.c
  *
  *      \author  thomas.schnuerer@men.de
- *        $Date: 2013/05/16 17:46:43 $
- *    $Revision: 1.9 $
  *
  *      \brief   Low-level driver for PP04 modules, supporting Slave Operation
  *

@@ -2,8 +2,6 @@
 /*!
  *         \file mvb_simp.c
  *       \author thomas.schnuerer@men.de
- *        $Date: 2013/11/08 09:52:59 $
- *    $Revision: 1.10 $
  *
  *       \brief  Simple example program for the MVB LL driver
  *
