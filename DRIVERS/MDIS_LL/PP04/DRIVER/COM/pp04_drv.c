@@ -48,6 +48,8 @@
 #include <MEN/ll_entry.h>  	/* low-level driver branch table */
 #include <MEN/mvb_drv.h>	/* external header, NSDB ports dekl.	*/
 
+static const char IdentString[]=MENT_XSTR(MAK_REVISION);
+
 /*---------------------------+
  |  DEFINES                  |
  +---------------------------*/
@@ -2514,7 +2516,7 @@ static int32 PP04_Info(
  */
 static char* Ident( void )	/* nodoc */
 {
-    return( "PP04 - PP04 low level driver: $Id: pp04_drv.c,v 1.9 2013/05/16 17:46:43 ts Exp $" );
+    return( (char*) IdentString );
 }
 
 
