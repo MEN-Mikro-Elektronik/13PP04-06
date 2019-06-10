@@ -3,8 +3,8 @@
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="packagedesc.xsd">
 	<name>13pp0406</name>
 	<description>MDIS5 driver package for PP4 MVB PCI104 module</description>
-	<date>2015-07-24</date>
-	<revision>Release-1.12</revision>
+	<date>2019-06-07</date>
+	<revision>13PP04-06_01_13-12-g199ab0b</revision>
 	<docroot>DRIVERS/MDIS_LL/PP04/DOC/html/index.html</docroot>
 	<modellist>
 		<model>
