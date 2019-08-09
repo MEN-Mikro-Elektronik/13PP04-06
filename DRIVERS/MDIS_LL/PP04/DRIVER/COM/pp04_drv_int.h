@@ -1,7 +1,7 @@
 /*********************  P r o g r a m  -  M o d u l e ***********************
  *
  *         Name: pp04_drv_int.h
- *      Project: PP04 module driver (MDIS4)
+ *      Project: PP04 module driver (MDIS5)
  *
  *       Author: ts
  *
