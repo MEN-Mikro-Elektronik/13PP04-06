@@ -706,194 +706,200 @@
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_Init</name>
-      <anchor>a18</anchor>
+      <anchor>a19</anchor>
       <arglist>(DESC_SPEC *descSpec, OSS_HANDLE *osHdl, MACCESS *ma, OSS_SEM_HANDLE *devSemHdl, OSS_IRQ_HANDLE *irqHdl, LL_HANDLE **llHdlP)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_Exit</name>
-      <anchor>a19</anchor>
+      <anchor>a20</anchor>
       <arglist>(LL_HANDLE **llHdlP)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_Read</name>
-      <anchor>a20</anchor>
+      <anchor>a21</anchor>
       <arglist>(LL_HANDLE *llHdl, int32 ch, int32 *value)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_Write</name>
-      <anchor>a21</anchor>
+      <anchor>a22</anchor>
       <arglist>(LL_HANDLE *llHdl, int32 ch, int32 value)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_SetStat</name>
-      <anchor>a22</anchor>
+      <anchor>a23</anchor>
       <arglist>(LL_HANDLE *llHdl, int32 code, int32 ch, INT32_OR_64 value32_or_64)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_GetStat</name>
-      <anchor>a23</anchor>
+      <anchor>a24</anchor>
       <arglist>(LL_HANDLE *llHdl, int32 code, int32 ch, INT32_OR_64 *value32_or_64)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_BlockRead</name>
-      <anchor>a24</anchor>
+      <anchor>a25</anchor>
       <arglist>(LL_HANDLE *llHdl, int32 ch, void *buf, int32 size, int32 *nbrRdBytesP)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_BlockWrite</name>
-      <anchor>a25</anchor>
+      <anchor>a26</anchor>
       <arglist>(LL_HANDLE *llHdl, int32 ch, void *buf, int32 size, int32 *nbrWrBytesP)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_Irq</name>
-      <anchor>a26</anchor>
+      <anchor>a27</anchor>
       <arglist>(LL_HANDLE *llHdl)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>PP04_Info</name>
-      <anchor>a27</anchor>
+      <anchor>a28</anchor>
       <arglist>(int32 infoType,...)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>char *</type>
       <name>Ident</name>
-      <anchor>a28</anchor>
+      <anchor>a29</anchor>
       <arglist>(void)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>Cleanup</name>
-      <anchor>a29</anchor>
+      <anchor>a30</anchor>
       <arglist>(LL_HANDLE *llHdl, int32 retCode)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_EnableIrq</name>
-      <anchor>a30</anchor>
+      <anchor>a31</anchor>
       <arglist>(LL_HANDLE *llHdl, u_int16 irqFlag, u_int32 imrReg, u_int8 en)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_GetFrameErrorCount</name>
-      <anchor>a31</anchor>
+      <anchor>a32</anchor>
       <arglist>(LL_HANDLE *llHdl)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_SetInitializationLevel</name>
-      <anchor>a32</anchor>
+      <anchor>a33</anchor>
       <arglist>(LL_HANDLE *llHdl, u_int8 lvl)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_SAoffsetFromMCM</name>
-      <anchor>a33</anchor>
+      <anchor>a34</anchor>
       <arglist>(u_int8 mcm)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_ShutdownLineAB</name>
-      <anchor>a34</anchor>
+      <anchor>a35</anchor>
       <arglist>(LL_HANDLE *llHdl, u_int8 en, u_int8 line)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_FormatTM</name>
-      <anchor>a35</anchor>
+      <anchor>a36</anchor>
       <arglist>(LL_HANDLE *llHdl)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_SetupNSDB</name>
-      <anchor>a36</anchor>
+      <anchor>a37</anchor>
       <arglist>(LL_HANDLE *llHdl, MVB_LA_PORT *nsdbP, u_int16 nrPorts)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_PortInit</name>
-      <anchor>a37</anchor>
+      <anchor>a38</anchor>
       <arglist>(LL_HANDLE *llHdl, MVB_LA_PORT_NODE *portP)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_PerformDiagnose</name>
-      <anchor>a38</anchor>
+      <anchor>a39</anchor>
       <arglist>(LL_HANDLE *llHdl)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_SetupSinktimeSupervision</name>
-      <anchor>a39</anchor>
+      <anchor>a40</anchor>
       <arglist>(LL_HANDLE *llHdl, u_int16 interval)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>void</type>
       <name>MVB_ResetErrorCount</name>
-      <anchor>a40</anchor>
+      <anchor>a41</anchor>
       <arglist>(LL_HANDLE *llHdl)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_GetSinktime</name>
-      <anchor>a41</anchor>
+      <anchor>a42</anchor>
       <arglist>(LL_HANDLE *llHdl, int32 ch)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>int32</type>
       <name>MVB_SetDeviceStatusword</name>
-      <anchor>a42</anchor>
+      <anchor>a43</anchor>
       <arglist>(LL_HANDLE *llHdl, int32 value)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>u_int32</type>
       <name>MVB_SetupMemConfiguration</name>
-      <anchor>a43</anchor>
+      <anchor>a44</anchor>
       <arglist>(LL_HANDLE *llHdl)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>u_int8</type>
       <name>MVB_FcodeFromSize</name>
-      <anchor>a44</anchor>
+      <anchor>a45</anchor>
       <arglist>(u_int16 size)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>u_int32</type>
       <name>MVB_InitTMoffsets</name>
-      <anchor>a45</anchor>
+      <anchor>a46</anchor>
       <arglist>(LL_HANDLE *llHdl)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>u_int32</type>
       <name>MVB_ConfigDeviceAddress</name>
-      <anchor>a46</anchor>
+      <anchor>a47</anchor>
       <arglist>(LL_HANDLE *llHdl, u_int16 addr)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>void</type>
       <name>MVB_Timer2Func</name>
-      <anchor>a47</anchor>
+      <anchor>a48</anchor>
       <arglist>(void *arg)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>void</type>
       <name>MVB_WDtriggerFunc</name>
-      <anchor>a48</anchor>
+      <anchor>a49</anchor>
       <arglist>(LL_HANDLE *llHdl)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>PP04_SW_GetEntry</name>
-      <anchor>a49</anchor>
+      <anchor>a50</anchor>
       <arglist>(LL_ENTRY *drvP)</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>const char</type>
+      <name>IdentString</name>
+      <anchor>a18</anchor>
+      <arglist>[]</arglist>
     </member>
   </compound>
   <compound kind="struct">

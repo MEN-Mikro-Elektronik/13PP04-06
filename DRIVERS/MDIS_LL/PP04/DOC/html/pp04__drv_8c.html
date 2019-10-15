@@ -47,83 +47,83 @@
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a16">PI2TMADDR</a>(p_idx)&nbsp;&nbsp;&nbsp;(((p_idx &amp; 0xfffc)*16)+((p_idx &amp; 0x3)*8))</td></tr>
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a17">ADDRESS_IS_ODD</a>(adr)&nbsp;&nbsp;&nbsp;(adr &amp; 0x1)</td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a18">PP04_Init</a> (DESC_SPEC *descSpec, OSS_HANDLE *osHdl, MACCESS *ma, OSS_SEM_HANDLE *devSemHdl, OSS_IRQ_HANDLE *irqHdl, LL_HANDLE **llHdlP)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Allocate and return low-level handle, initialize hardware.</em> <a href="#a18"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a19">PP04_Exit</a> (LL_HANDLE **llHdlP)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">De-initialize hardware and clean up memory.</em> <a href="#a19"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a20">PP04_Read</a> (LL_HANDLE *llHdl, int32 ch, int32 *value)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Read a value from the device this Function is a no op, LA Ports are read and written using the BlockRead / BlockWrite Functions.</em> <a href="#a20"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a21">PP04_Write</a> (LL_HANDLE *llHdl, int32 ch, int32 value)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Write a value to the device this Function is a no op, LA Ports are read and written using the BlockRead / BlockWrite Functions.</em> <a href="#a21"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a22">PP04_SetStat</a> (LL_HANDLE *llHdl, int32 code, int32 ch, INT32_OR_64 value32_or_64)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Set the driver status.</em> <a href="#a22"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a23">PP04_GetStat</a> (LL_HANDLE *llHdl, int32 code, int32 ch, INT32_OR_64 *value32_or_64)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Get a driver status.</em> <a href="#a23"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a24">PP04_BlockRead</a> (LL_HANDLE *llHdl, int32 ch, void *buf, int32 size, int32 *nbrRdBytesP)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Read a data block from the device, here the complete LA port content the MVB Port data with address ch is read from TM Byte order of stored data: Bytes are always stored in big endian Format. That means that for example the sink data from an 8 byte port , received as: |b7|b6|b5|b4|b3|b2|b1|b0| (b7 sent first) _____ are stored as |b7|b6| *buf, *(buf+1) ----- |b5|b4| *(buf+2), *(buf+3) etc. -----.</em> <a href="#a24"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a25">PP04_BlockWrite</a> (LL_HANDLE *llHdl, int32 ch, void *buf, int32 size, int32 *nbrWrBytesP)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Write a data block to the device.</em> <a href="#a25"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a26">PP04_Irq</a> (LL_HANDLE *llHdl)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Interrupt service routine.</em> <a href="#a26"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a27">PP04_Info</a> (int32 infoType,...)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Get information about hardware and driver requirements.</em> <a href="#a27"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>char *&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a28">Ident</a> (void)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Return ident string.</em> <a href="#a28"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a29">Cleanup</a> (LL_HANDLE *llHdl, int32 retCode)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Close all handles, free memory and return error code.</em> <a href="#a29"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a30">MVB_EnableIrq</a> (LL_HANDLE *llHdl, u_int16 irqFlag, u_int32 imrReg, u_int8 en)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">enable/disable one IRQ in IMR0 or IMR1</em> <a href="#a30"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a31">MVB_GetFrameErrorCount</a> (LL_HANDLE *llHdl)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">return accumulated number of errornous frames</em> <a href="#a31"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a32">MVB_SetInitializationLevel</a> (LL_HANDLE *llHdl, u_int8 lvl)</td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a19">PP04_Init</a> (DESC_SPEC *descSpec, OSS_HANDLE *osHdl, MACCESS *ma, OSS_SEM_HANDLE *devSemHdl, OSS_IRQ_HANDLE *irqHdl, LL_HANDLE **llHdlP)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Allocate and return low-level handle, initialize hardware.</em> <a href="#a19"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a20">PP04_Exit</a> (LL_HANDLE **llHdlP)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">De-initialize hardware and clean up memory.</em> <a href="#a20"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a21">PP04_Read</a> (LL_HANDLE *llHdl, int32 ch, int32 *value)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Read a value from the device this Function is a no op, LA Ports are read and written using the BlockRead / BlockWrite Functions.</em> <a href="#a21"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a22">PP04_Write</a> (LL_HANDLE *llHdl, int32 ch, int32 value)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Write a value to the device this Function is a no op, LA Ports are read and written using the BlockRead / BlockWrite Functions.</em> <a href="#a22"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a23">PP04_SetStat</a> (LL_HANDLE *llHdl, int32 code, int32 ch, INT32_OR_64 value32_or_64)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Set the driver status.</em> <a href="#a23"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a24">PP04_GetStat</a> (LL_HANDLE *llHdl, int32 code, int32 ch, INT32_OR_64 *value32_or_64)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Get a driver status.</em> <a href="#a24"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a25">PP04_BlockRead</a> (LL_HANDLE *llHdl, int32 ch, void *buf, int32 size, int32 *nbrRdBytesP)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Read a data block from the device, here the complete LA port content the MVB Port data with address ch is read from TM Byte order of stored data: Bytes are always stored in big endian Format. That means that for example the sink data from an 8 byte port , received as: |b7|b6|b5|b4|b3|b2|b1|b0| (b7 sent first) _____ are stored as |b7|b6| *buf, *(buf+1) ----- |b5|b4| *(buf+2), *(buf+3) etc. -----.</em> <a href="#a25"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a26">PP04_BlockWrite</a> (LL_HANDLE *llHdl, int32 ch, void *buf, int32 size, int32 *nbrWrBytesP)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Write a data block to the device.</em> <a href="#a26"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a27">PP04_Irq</a> (LL_HANDLE *llHdl)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Interrupt service routine.</em> <a href="#a27"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a28">PP04_Info</a> (int32 infoType,...)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Get information about hardware and driver requirements.</em> <a href="#a28"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>char *&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a29">Ident</a> (void)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Return ident string.</em> <a href="#a29"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a30">Cleanup</a> (LL_HANDLE *llHdl, int32 retCode)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Close all handles, free memory and return error code.</em> <a href="#a30"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a31">MVB_EnableIrq</a> (LL_HANDLE *llHdl, u_int16 irqFlag, u_int32 imrReg, u_int8 en)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">enable/disable one IRQ in IMR0 or IMR1</em> <a href="#a31"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a32">MVB_GetFrameErrorCount</a> (LL_HANDLE *llHdl)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">return accumulated number of errornous frames</em> <a href="#a32"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a33">MVB_SetInitializationLevel</a> (LL_HANDLE *llHdl, u_int8 lvl)</td></tr>
 <tr><td>&nbsp;</td><td><em class="mdesc">Bring MVBCS1 into one of 4 specific operational levels the MVBCS1 can be in one of these 4 initialization levels:<br>
  MVB_INITLEVEL_SW_RESET warm reset<br>
  MVB_INITLEVEL_CONFIG_MODE needed to setup ports<br>
  MVB_INITLEVEL_SELFTEST_MODE for loopback tests<br>
- MVB_INITLEVEL_FULL_OP to start MVB communication.</em> <a href="#a32"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a33">MVB_SAoffsetFromMCM</a> (u_int8 mcm)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">return offset between llHdl-&gt;ma and the internal Registers (Service Area) The offset of the intern Registers depends on the Memory Configuration Mode MCM. Once MCM Register is set, its value shouldnt be changed.</em> <a href="#a33"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a34">MVB_ShutdownLineAB</a> (LL_HANDLE *llHdl, u_int8 en, u_int8 line)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Shutdown or enable Line A or B of the redundant MVBus connection.</em> <a href="#a34"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a35">MVB_FormatTM</a> (LL_HANDLE *llHdl)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Format the port index tables, depending on MCM mode.</em> <a href="#a35"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a36">MVB_SetupNSDB</a> (LL_HANDLE *llHdl, <a class="el" href="structG__MVBPORTS.html">MVB_LA_PORT</a> *nsdbP, u_int16 nrPorts)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Store passed NSDB Setup in DL_NODE elements. to store internal information for the LA Ports, a MVB_LA_PORT_NODE is dynamically created. To access each LA port directly later, a LUT in the llHdl is used to get the ports struct over his port number.</em> <a href="#a36"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a37">MVB_PortInit</a> (LL_HANDLE *llHdl, MVB_LA_PORT_NODE *portP)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Do the complete initialization of PCS and PIT for this Port so it can be used when ASIC is put in full functional mode (IL=3).</em> <a href="#a37"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a38">MVB_PerformDiagnose</a> (LL_HANDLE *llHdl)</td></tr>
+ MVB_INITLEVEL_FULL_OP to start MVB communication.</em> <a href="#a33"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a34">MVB_SAoffsetFromMCM</a> (u_int8 mcm)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">return offset between llHdl-&gt;ma and the internal Registers (Service Area) The offset of the intern Registers depends on the Memory Configuration Mode MCM. Once MCM Register is set, its value shouldnt be changed.</em> <a href="#a34"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a35">MVB_ShutdownLineAB</a> (LL_HANDLE *llHdl, u_int8 en, u_int8 line)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Shutdown or enable Line A or B of the redundant MVBus connection.</em> <a href="#a35"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a36">MVB_FormatTM</a> (LL_HANDLE *llHdl)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Format the port index tables, depending on MCM mode.</em> <a href="#a36"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a37">MVB_SetupNSDB</a> (LL_HANDLE *llHdl, <a class="el" href="structG__MVBPORTS.html">MVB_LA_PORT</a> *nsdbP, u_int16 nrPorts)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Store passed NSDB Setup in DL_NODE elements. to store internal information for the LA Ports, a MVB_LA_PORT_NODE is dynamically created. To access each LA port directly later, a LUT in the llHdl is used to get the ports struct over his port number.</em> <a href="#a37"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a38">MVB_PortInit</a> (LL_HANDLE *llHdl, MVB_LA_PORT_NODE *portP)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Do the complete initialization of PCS and PIT for this Port so it can be used when ASIC is put in full functional mode (IL=3).</em> <a href="#a38"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a39">MVB_PerformDiagnose</a> (LL_HANDLE *llHdl)</td></tr>
 <tr><td>&nbsp;</td><td><em class="mdesc">Do a Diagnose of the MVBCS1 by internal loopback test the physical test port is used in loopback mode and a manual Master Frame is triggered. The received Test Sink Port Value is tested for equality. <br>
- Before, the access to a specific MVBCS1 Register is tested.</em> <a href="#a38"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a39">MVB_SetupSinktimeSupervision</a> (LL_HANDLE *llHdl, u_int16 interval)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">setup Sinktime Supervision for given Range of ports the values passed to the Function go directly to the Sinktime Supervision Register. This LL driver per default monitors all (sink-)docks available in its MCM. The interval is corrected if too small for this MCM.</em> <a href="#a39"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a40">MVB_ResetErrorCount</a> (LL_HANDLE *llHdl)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Clear all error count variables / flags of this LL Handle.</em> <a href="#a40"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a41">MVB_GetSinktime</a> (LL_HANDLE *llHdl, int32 ch)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">retrieve the Sinktime Value of a certain (sink)port</em> <a href="#a41"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a42">MVB_SetDeviceStatusword</a> (LL_HANDLE *llHdl, int32 value)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">set the User servicable bits in the device status word The function sets the bits in the Device Status Word which shall be set by the user. These are: Device Not Ready DNR Some Device Disturbed SDD Some System Disturbed SSD</em> <a href="#a42"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>u_int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a43">MVB_SetupMemConfiguration</a> (LL_HANDLE *llHdl)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">set the Memory configuration mode The offset of the intern Registers depends on the Memory Configuration Mode MCM. Once MCM is set, its value shouldnt be changed anymore.</em> <a href="#a43"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>u_int8&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a44">MVB_FcodeFromSize</a> (u_int16 size)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">return F code depending on size To program a LA ports PCS Block with the correct F code its size needs to be known so the F code in the Master frame retrieves the correct number of bits</em> <a href="#a44"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>u_int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a45">MVB_InitTMoffsets</a> (LL_HANDLE *llHdl)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">init Memory Maps on MCM mode The memory start and lengths of each area in the memory map are initialized according to MCM0-4 as in datasheet MVBCS1 p. 27</em> <a href="#a45"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>u_int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a46">MVB_ConfigDeviceAddress</a> (LL_HANDLE *llHdl, u_int16 addr)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">set the MVB dev address this PP04 shall use</em> <a href="#a46"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a47">MVB_Timer2Func</a> (void *arg)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Alarm function to check if MVBCS1 ASIC is operating the LL driver monitors that the MVB Asic is alive by checking if Timer2 decrements regulary, and by checking that the init level is still 3 (Full Operation).</em> <a href="#a47"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a48">MVB_WDtriggerFunc</a> (LL_HANDLE *llHdl)</td></tr>
+ Before, the access to a specific MVBCS1 Register is tested.</em> <a href="#a39"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a40">MVB_SetupSinktimeSupervision</a> (LL_HANDLE *llHdl, u_int16 interval)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">setup Sinktime Supervision for given Range of ports the values passed to the Function go directly to the Sinktime Supervision Register. This LL driver per default monitors all (sink-)docks available in its MCM. The interval is corrected if too small for this MCM.</em> <a href="#a40"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a41">MVB_ResetErrorCount</a> (LL_HANDLE *llHdl)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Clear all error count variables / flags of this LL Handle.</em> <a href="#a41"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a42">MVB_GetSinktime</a> (LL_HANDLE *llHdl, int32 ch)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">retrieve the Sinktime Value of a certain (sink)port</em> <a href="#a42"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a43">MVB_SetDeviceStatusword</a> (LL_HANDLE *llHdl, int32 value)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">set the User servicable bits in the device status word The function sets the bits in the Device Status Word which shall be set by the user. These are: Device Not Ready DNR Some Device Disturbed SDD Some System Disturbed SSD</em> <a href="#a43"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>u_int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a44">MVB_SetupMemConfiguration</a> (LL_HANDLE *llHdl)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">set the Memory configuration mode The offset of the intern Registers depends on the Memory Configuration Mode MCM. Once MCM is set, its value shouldnt be changed anymore.</em> <a href="#a44"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>u_int8&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a45">MVB_FcodeFromSize</a> (u_int16 size)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">return F code depending on size To program a LA ports PCS Block with the correct F code its size needs to be known so the F code in the Master frame retrieves the correct number of bits</em> <a href="#a45"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>u_int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a46">MVB_InitTMoffsets</a> (LL_HANDLE *llHdl)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">init Memory Maps on MCM mode The memory start and lengths of each area in the memory map are initialized according to MCM0-4 as in datasheet MVBCS1 p. 27</em> <a href="#a46"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>u_int32&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a47">MVB_ConfigDeviceAddress</a> (LL_HANDLE *llHdl, u_int16 addr)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">set the MVB dev address this PP04 shall use</em> <a href="#a47"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a48">MVB_Timer2Func</a> (void *arg)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Alarm function to check if MVBCS1 ASIC is operating the LL driver monitors that the MVB Asic is alive by checking if Timer2 decrements regulary, and by checking that the init level is still 3 (Full Operation).</em> <a href="#a48"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a49">MVB_WDtriggerFunc</a> (LL_HANDLE *llHdl)</td></tr>
 <tr><td>&nbsp;</td><td><em class="mdesc">retrigger the MVBCS1 Watchdog so the MVBCS1 'knows' the LL driver is alive The MVBCS1 Asic monitors the LL driver with his Watchdog. The Watchdog is retriggered by the user application, this should happen about every 500 ms.<br>
- This should give enough overhead time to the CPU in case of e.g. time consuming blocking I/O Operations.</em> <a href="#a48"></a><em></em><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a49">PP04_SW_GetEntry</a> (LL_ENTRY *drvP)</td></tr>
-<tr><td>&nbsp;</td><td><em class="mdesc">Initialize driver's jump table.</em> <a href="#a49"></a><em></em><br><br></td></tr>
+ This should give enough overhead time to the CPU in case of e.g. time consuming blocking I/O Operations.</em> <a href="#a49"></a><em></em><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a50">PP04_SW_GetEntry</a> (LL_ENTRY *drvP)</td></tr>
+<tr><td>&nbsp;</td><td><em class="mdesc">Initialize driver's jump table.</em> <a href="#a50"></a><em></em><br><br></td></tr>
+<tr><td colspan=2><br><h2>Variables</h2></td></tr>
+<tr><td nowrap align=right valign=top>const char&nbsp;</td><td valign=bottom><a class="el" href="pp04__drv_8c.html#a18">IdentString</a> [] = MENT_XSTR(MAK_REVISION)</td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Low-level driver for PP04 modules, supporting Slave Operation.
 <p>
-<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:thomas.schnuerer@men.de">thomas.schnuerer@men.de</a> <dl compact><dt><b>Date</b></dt><dd>2013/05/16 17:46:43 </dd></dl>
-<dl compact><dt><b>Revision</b></dt><dd>1.9 </dd></dl>
-</dd></dl>
+<dl compact><dt><b>Author:</b></dt><dd><a href="mailto:thomas.schnuerer@men.de">thomas.schnuerer@men.de</a></dd></dl>
 <p>
 Required: OSS, DESC, DBG libraries<p>
 <dl compact><dt><b>Preprocessor Switches:</b></dt><dd></dd></dl>
@@ -545,7 +545,7 @@ Required: OSS, DESC, DBG libraries<p>
   </tr>
 </table>
 <hr><h2>Function Documentation</h2>
-<a name="a29" doxytag="pp04_drv.c::Cleanup"></a><p>
+<a name="a30" doxytag="pp04_drv.c::Cleanup"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -593,7 +593,7 @@ Close all handles, free memory and return error code.
     </td>
   </tr>
 </table>
-<a name="a28" doxytag="pp04_drv.c::Ident"></a><p>
+<a name="a29" doxytag="pp04_drv.c::Ident"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -625,7 +625,7 @@ Return ident string.
     </td>
   </tr>
 </table>
-<a name="a46" doxytag="pp04_drv.c::MVB_ConfigDeviceAddress"></a><p>
+<a name="a47" doxytag="pp04_drv.c::MVB_ConfigDeviceAddress"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -672,7 +672,7 @@ set the MVB dev address this PP04 shall use
     </td>
   </tr>
 </table>
-<a name="a30" doxytag="pp04_drv.c::MVB_EnableIrq"></a><p>
+<a name="a31" doxytag="pp04_drv.c::MVB_EnableIrq"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -734,7 +734,7 @@ Enable IRQ given as the only set bit in a 32bit value. see pp04_drv.h<p>
     </td>
   </tr>
 </table>
-<a name="a44" doxytag="pp04_drv.c::MVB_FcodeFromSize"></a><p>
+<a name="a45" doxytag="pp04_drv.c::MVB_FcodeFromSize"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -771,7 +771,7 @@ return F code depending on size To program a LA ports PCS Block with the correct
     </td>
   </tr>
 </table>
-<a name="a35" doxytag="pp04_drv.c::MVB_FormatTM"></a><p>
+<a name="a36" doxytag="pp04_drv.c::MVB_FormatTM"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -809,7 +809,7 @@ Must be called after TM area offsets have been initialized.<p>
     </td>
   </tr>
 </table>
-<a name="a31" doxytag="pp04_drv.c::MVB_GetFrameErrorCount"></a><p>
+<a name="a32" doxytag="pp04_drv.c::MVB_GetFrameErrorCount"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -845,7 +845,7 @@ return accumulated number of errornous frames
     </td>
   </tr>
 </table>
-<a name="a41" doxytag="pp04_drv.c::MVB_GetSinktime"></a><p>
+<a name="a42" doxytag="pp04_drv.c::MVB_GetSinktime"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -892,7 +892,7 @@ retrieve the Sinktime Value of a certain (sink)port
     </td>
   </tr>
 </table>
-<a name="a45" doxytag="pp04_drv.c::MVB_InitTMoffsets"></a><p>
+<a name="a46" doxytag="pp04_drv.c::MVB_InitTMoffsets"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -929,7 +929,7 @@ init Memory Maps on MCM mode The memory start and lengths of each area in the me
     </td>
   </tr>
 </table>
-<a name="a38" doxytag="pp04_drv.c::MVB_PerformDiagnose"></a><p>
+<a name="a39" doxytag="pp04_drv.c::MVB_PerformDiagnose"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -968,7 +968,7 @@ Do a Diagnose of the MVBCS1 by internal loopback test the physical test port is 
 poll MR[BUSY] after Masterframe start for max. 50x10us=500us. BUSY is deasserted after t(MF)+t(answer)=ca 40 us normally.    </td>
   </tr>
 </table>
-<a name="a37" doxytag="pp04_drv.c::MVB_PortInit"></a><p>
+<a name="a38" doxytag="pp04_drv.c::MVB_PortInit"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1025,7 +1025,7 @@ Do the complete initialization of PCS and PIT for this Port so it can be used wh
 </pre></div>    </td>
   </tr>
 </table>
-<a name="a40" doxytag="pp04_drv.c::MVB_ResetErrorCount"></a><p>
+<a name="a41" doxytag="pp04_drv.c::MVB_ResetErrorCount"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1062,7 +1062,7 @@ Clear all error count variables / flags of this LL Handle.
     </td>
   </tr>
 </table>
-<a name="a33" doxytag="pp04_drv.c::MVB_SAoffsetFromMCM"></a><p>
+<a name="a34" doxytag="pp04_drv.c::MVB_SAoffsetFromMCM"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1099,7 +1099,7 @@ return offset between llHdl-&gt;ma and the internal Registers (Service Area) The
     </td>
   </tr>
 </table>
-<a name="a42" doxytag="pp04_drv.c::MVB_SetDeviceStatusword"></a><p>
+<a name="a43" doxytag="pp04_drv.c::MVB_SetDeviceStatusword"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1146,7 +1146,7 @@ set the User servicable bits in the device status word The function sets the bit
     </td>
   </tr>
 </table>
-<a name="a32" doxytag="pp04_drv.c::MVB_SetInitializationLevel"></a><p>
+<a name="a33" doxytag="pp04_drv.c::MVB_SetInitializationLevel"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1197,7 +1197,7 @@ Bring MVBCS1 into one of 4 specific operational levels the MVBCS1 can be in one 
     </td>
   </tr>
 </table>
-<a name="a43" doxytag="pp04_drv.c::MVB_SetupMemConfiguration"></a><p>
+<a name="a44" doxytag="pp04_drv.c::MVB_SetupMemConfiguration"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1235,7 +1235,7 @@ set the Memory configuration mode The offset of the intern Registers depends on 
 After powerup the MCMode is unknown. So set the Memory Configuration Mode in all 3 possible Register offsets first. This is also done with initial Initialization level IL[2..0]    </td>
   </tr>
 </table>
-<a name="a36" doxytag="pp04_drv.c::MVB_SetupNSDB"></a><p>
+<a name="a37" doxytag="pp04_drv.c::MVB_SetupNSDB"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1288,7 +1288,7 @@ Store passed NSDB Setup in DL_NODE elements. to store internal information for t
     </td>
   </tr>
 </table>
-<a name="a39" doxytag="pp04_drv.c::MVB_SetupSinktimeSupervision"></a><p>
+<a name="a40" doxytag="pp04_drv.c::MVB_SetupSinktimeSupervision"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1336,7 +1336,7 @@ setup Sinktime Supervision for given Range of ports the values passed to the Fun
     </td>
   </tr>
 </table>
-<a name="a34" doxytag="pp04_drv.c::MVB_ShutdownLineAB"></a><p>
+<a name="a35" doxytag="pp04_drv.c::MVB_ShutdownLineAB"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1390,7 +1390,7 @@ Shutdown or enable Line A or B of the redundant MVBus connection.
     </td>
   </tr>
 </table>
-<a name="a47" doxytag="pp04_drv.c::MVB_Timer2Func"></a><p>
+<a name="a48" doxytag="pp04_drv.c::MVB_Timer2Func"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1426,7 +1426,7 @@ Alarm function to check if MVBCS1 ASIC is operating the LL driver monitors that 
     </td>
   </tr>
 </table>
-<a name="a48" doxytag="pp04_drv.c::MVB_WDtriggerFunc"></a><p>
+<a name="a49" doxytag="pp04_drv.c::MVB_WDtriggerFunc"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1463,7 +1463,7 @@ retrigger the MVBCS1 Watchdog so the MVBCS1 'knows' the LL driver is alive The M
     </td>
   </tr>
 </table>
-<a name="a24" doxytag="pp04_drv.c::PP04_BlockRead"></a><p>
+<a name="a25" doxytag="pp04_drv.c::PP04_BlockRead"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1531,7 +1531,7 @@ Read a data block from the device, here the complete LA port content the MVB Por
     </td>
   </tr>
 </table>
-<a name="a25" doxytag="pp04_drv.c::PP04_BlockWrite"></a><p>
+<a name="a26" doxytag="pp04_drv.c::PP04_BlockWrite"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1600,7 +1600,7 @@ The function is not supported and always returns an ERR_LL_ILL_FUNC error.<p>
     </td>
   </tr>
 </table>
-<a name="a19" doxytag="pp04_drv.c::PP04_Exit"></a><p>
+<a name="a20" doxytag="pp04_drv.c::PP04_Exit"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1638,7 +1638,7 @@ The function deinitializes all channels. The interrupt is disabled.<p>
     </td>
   </tr>
 </table>
-<a name="a23" doxytag="pp04_drv.c::PP04_GetStat"></a><p>
+<a name="a24" doxytag="pp04_drv.c::PP04_GetStat"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1701,7 +1701,7 @@ The driver supports <a class="el" href="index.html#getstat_setstat_codes">getsta
     </td>
   </tr>
 </table>
-<a name="a27" doxytag="pp04_drv.c::PP04_Info"></a><p>
+<a name="a28" doxytag="pp04_drv.c::PP04_Info"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1762,7 +1762,7 @@ The LL_INFO_LOCKMODE code returns which process locking mode the driver needs (L
     </td>
   </tr>
 </table>
-<a name="a18" doxytag="pp04_drv.c::PP04_Init"></a><p>
+<a name="a19" doxytag="pp04_drv.c::PP04_Init"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1839,7 +1839,7 @@ The function decodes <a class="el" href="index.html#descriptor_entries">these de
     </td>
   </tr>
 </table>
-<a name="a26" doxytag="pp04_drv.c::PP04_Irq"></a><p>
+<a name="a27" doxytag="pp04_drv.c::PP04_Irq"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1878,7 +1878,7 @@ If the driver can detect the interrupt's cause it returns LL_IRQ_DEVICE or LL_IR
     </td>
   </tr>
 </table>
-<a name="a20" doxytag="pp04_drv.c::PP04_Read"></a><p>
+<a name="a21" doxytag="pp04_drv.c::PP04_Read"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1932,7 +1932,7 @@ Read a value from the device this Function is a no op, LA Ports are read and wri
     </td>
   </tr>
 </table>
-<a name="a22" doxytag="pp04_drv.c::PP04_SetStat"></a><p>
+<a name="a23" doxytag="pp04_drv.c::PP04_SetStat"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1994,7 +1994,7 @@ The driver supports <a class="el" href="index.html#getstat_setstat_codes">these 
     </td>
   </tr>
 </table>
-<a name="a49" doxytag="pp04_drv.c::PP04_SW_GetEntry"></a><p>
+<a name="a50" doxytag="pp04_drv.c::PP04_SW_GetEntry"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2030,7 +2030,7 @@ Initialize driver's jump table.
     </td>
   </tr>
 </table>
-<a name="a21" doxytag="pp04_drv.c::PP04_Write"></a><p>
+<a name="a22" doxytag="pp04_drv.c::PP04_Write"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2084,6 +2084,29 @@ Write a value to the device this Function is a no op, LA Ports are read and writ
     </td>
   </tr>
 </table>
+<hr><h2>Variable Documentation</h2>
+<a name="a18" doxytag="pp04_drv.c::IdentString"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> const char IdentString[] = MENT_XSTR(MAK_REVISION)<code> [static]</code>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 
 	</div>
 </div>
@@ -2091,8 +2114,7 @@ Write a value to the device this Function is a no op, LA Ports are read and writ
 <div class="footer">
 <!-- Footer -->
 	<p class="footer">
-	Generated for PP4 MDIS Driver using <a href="http://www.doxygen.org">doxygen</a>.<br>
-	Copyright &copy; 2019 <a href="http://www.men.de">MEN Mikro Elektronik GmbH</a>. All Rights Reserved.
+	Generated for PP4 MDIS Driver using <a href="http://www.doxygen.org">doxygen</a>. All Rights Reserved.
 	</p>
 </div>
 
